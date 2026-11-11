@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Center Statistics</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+<div>
+<h1>Call Center Statistics</h1>
+<p>Gestion des statistiques des appels</p>
+</div>
+<strong style="color:#087f5b">Superviseur</strong>
+</header>
+
+<main class="container">
+
+<nav class="tabs">
+<button class="tab active" data-page="dashboard">Dashboard</button>
+<button class="tab" data-page="entry">Saisie des appels</button>
+<button class="tab" data-page="records">Historique</button>
+<button class="tab" data-page="backup">Sauvegarde</button>
+</nav>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="view">
+
+<h2>Tableau de bord</h2>
+
+<div class="filters">
+
+<label>Période
+<select id="period">
+<option value="day">Journalier</option>
+<option value="15days">15 jours</option>
+<option value="week">Hebdomadaire</option>
+<option value="month" selected>Mensuel</option>
+<option value="year">Annuel</option>
+<option value="custom">Période personnalisée</option>
+</select>
+</label>
+
+<label id="reportDateGroup">Date
+<input type="date" id="reportDate">
+</label>
+
+<label id="startDateGroup" class="hidden">Du
+<input type="date" id="startDate">
+</label>
+
+<label id="endDateGroup" class="hidden">Au
+<input type="date" id="endDate">
+</label>
+
+<label>Centre
+<select id="reportCenter">
+<option value="all">Tous les centres</option>
+</select>
+</label>
+
+<button class="btn" id="refresh">Actualiser</button>
+
+</div>
+
+<div class="cards">
+<div class="card">
+<p>Total des appels entrants</p>
+<h2 id="total">0</h2>
+</div>
+
+<div class="card">
+<p>Appels répondus</p>
+<h2 id="answered">0</h2>
+</div>
+
+<div class="card">
+<p>Appels manqués</p>
+<h2 id="missed">0</h2>
+</div>
+
+<div class="card">
+<p>Appels transférés</p>
+<h2 id="transferred">0</h2>
+</div>
+
+<div class="card">
+<p>Taux de réponse</p>
+<h2 id="rate">0%</h2>
+</div>
+</div>
+
+<div class="panel">
+<h3>Statistiques par centre</h3>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Centre</th>
+<th>Entrants</th>
+<th>Répondus</th>
+<th>Manqués</th>
+<th>Transférés</th>
+<th>Taux</th>
+</tr>
+</thead>
+
+<tbody id="centerTable"></tbody>
+</table>
+</div>
+</div>
+
+</section>
+
+<!-- ENTRY -->
+
+<section id="entry" class="view hidden">
+
+<h2>Saisie des statistiques</h2>
+
+<form id="form" class="panel form-grid">
+
+<label>Date
+<input type="date" id="date" required>
+</label>
+
+<label>Centre
+<select id="center" required></select>
+</label>
+
+<label>Appels répondus
+<input type="number" id="a" min="0" value="0" required>
+</label>
+
+<label>Appels manqués
+<input type="number" id="m" min="0" value="0" required>
+</label>
+
+<label>Appels transférés
+<input type="number" id="t" min="0" value="0" required>
+</label>
+
+<label class="full">Observations
+<input type="text" id="notes" placeholder="Observations facultatives">
+</label>
+
+<div class="formula full">
+Total entrant = appels répondus + appels manqués.<br>
+Les appels transférés sont déjà inclus dans les appels répondus.
+</div>
+
+<div class="full">
+<button class="btn" type="submit">Enregistrer</button>
+<button class="btn secondary" type="reset">Effacer</button>
+</div>
+
+<p id="message" class="message full"></p>
+
+</form>
+</section>
+
+<!-- RECORDS -->
+
+<section id="records" class="view hidden">
+
+<h2>Historique des appels</h2>
+
+<div class="filters">
+
+<label>Du
+<input type="date" id="from">
+</label>
+
+<label>Au
+<input type="date" id="to">
+</label>
+
+<label>Centre
+<select id="filterCenter">
+<option value="all">Tous les centres</option>
+</select>
+</label>
+
+<button class="btn" id="search">Rechercher</button>
+
+</div>
+
+<div class="panel table-container">
+
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Centre</th>
+<th>Répondus</th>
+<th>Manqués</th>
+<th>Transférés</th>
+<th>Entrants</th>
+<th>Observations</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="history"></tbody>
+</table>
+
+</div>
+
+</section>
+
+<!-- BACKUP -->
+
+<section id="backup" class="view hidden">
+
+<h2>Sauvegarde des données</h2>
+
+<div class="panel">
+
+<h3>Exporter les données</h3>
+<p>Télécharger une sauvegarde de tous les enregistrements.</p>
+
+<button class="btn" id="backup">Télécharger JSON</button>
+
+<hr>
+
+<h3>Importer une sauvegarde</h3>
+
+<input type="file" id="file" accept=".json">
+<button class="btn secondary" id="restore">Importer</button>
+
+<hr>
+
+<p class="warning">
+Les données sont enregistrées dans le navigateur de cet appareil.
+Elles ne sont pas automatiquement synchronisées avec les autres appareils.
+</p>
+
+</div>
+</section>
+
+</main>
+
+<footer>Call Center Statistics System</footer>
+
+<script src="script.js"></script>
+
+</body>
+  </html>
+  
